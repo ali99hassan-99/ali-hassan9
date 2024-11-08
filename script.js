@@ -1,24 +1,30 @@
 function searchFunction() {
-    const searchQuery = document.getElementById('search').value.trim(); // الحصول على النص المدخل من المستخدم
-    const resultElement = document.getElementById('search-result'); // العنصر لعرض النتيجة
+    const searchTerm = document.getElementById('search').value;
 
-    if (!searchQuery) {
-        resultElement.textContent = 'يرجى إدخال اسم للبحث';
+    if (!searchTerm) {
+        document.getElementById('search-result').innerHTML = 'الرجاء إدخال اسم للبحث';
         return;
     }
 
-    // إرسال طلب GET إلى السيرفر للبحث
-    fetch(`/search?name=${encodeURIComponent(searchQuery)}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.result) {
-                resultElement.textContent = `النتيجة: ${data.result}`; // عرض النتيجة إذا تم العثور عليها
-            } else {
-                resultElement.textContent = data.error || 'حدث خطأ أثناء البحث'; // عرض الخطأ إذا لم يتم العثور على البيانات
-            }
-        })
-        .catch(error => {
-            resultElement.textContent = 'حدث خطأ أثناء البحث';
-            console.error('Error:', error); // عرض الخطأ في الكونسول للمساعدة في التصحيح
-        });
+    // إرسال طلب POST إلى الخادم
+    fetch('/search', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ searchTerm: searchTerm })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('بيانات البحث:', data); // لتتبع النتيجة التي يرسلها السيرفر
+        if (data.error) {
+            document.getElementById('search-result').innerHTML = data.error;
+        } else {
+            document.getElementById('search-result').innerHTML = 'النتيجة: ' + data.result;
+        }
+    })
+    .catch(error => {
+        document.getElementById('search-result').innerHTML = 'حدث خطأ أثناء البحث';
+        console.error('Error:', error);
+    });
 }
