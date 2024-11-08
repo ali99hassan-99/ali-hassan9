@@ -1,50 +1,61 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const xlsx = require('xlsx');
+
 const app = express();
-
-// استخدام Express لخدمة الملفات الثابتة
-app.use(express.static(path.join(__dirname, 'public')));
-
-// تكوين البورت الذي سيعمل عليه السيرفر
 const port = 3000;
 
-// تشغيل السيرفر
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+// لتحديد مكان الملف excel
+const filePath = path.join(__dirname, 'public', 'ali.xlsx'); // تأكد من أن اسم الملف والمسار صحيحين
+
+// تفعيل خدمة static لتقديم الملفات من مجلد public
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json()); // لاستخلاص البيانات من الاستعلامات POST
+
+// تعامل مع POST طلبات البحث
+app.post('/search', (req, res) => {
+    const searchTerm = req.body.searchTerm;
+
+    if (!searchTerm) {
+        return res.json({ error: 'الرجاء إدخال اسم للبحث' });
+    }
+
+    // تحميل ورقة العمل من ملف Excel
+    let workbook;
+    try {
+        workbook = xlsx.readFile(filePath);
+    } catch (error) {
+        return res.json({ error: 'حدث خطأ أثناء تحميل ملف Excel' });
+    }
+
+    const sheet = workbook.Sheets[workbook.SheetNames[0]]; // نفترض أنه الملف يحتوي على ورقة واحدة
+    const data = xlsx.utils.sheet_to_json(sheet, { header: 1 }); // تحويل البيانات إلى مصفوفة من المصفوفات
+
+    // البحث عن القيمة في العمود A
+    let found = false;
+    let result = '';
+
+    for (let i = 1; i < data.length; i++) {  // بدءاً من الصف الثاني
+        if (data[i][0] === searchTerm) {
+            found = true;
+            result = data[i][1];  // العودة للعمود B
+            break;
+        }
+    }
+
+    if (found) {
+        return res.json({ result: result });
+    } else {
+        return res.json({ error: 'لم يتم العثور على البيانات' });
+    }
 });
 
-// المسار الرئيسي للموقع
+// صفحة HTML الأساسية
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// معالجة طلبات البحث
-app.get('/search', (req, res) => {
-    const searchQuery = req.query.name; // الحصول على اسم البحث من الطلب
-    const filePath = path.join(__dirname, 'public', 'ali.xlsx'); // مسار ملف الإكسل
-
-    try {
-        const workbook = xlsx.readFile(filePath); // قراءة الملف
-        const sheet = workbook.Sheets[workbook.SheetNames[0]]; // قراءة أول ورقة من الملف
-        const data = xlsx.utils.sheet_to_json(sheet, { header: 1 }); // تحويل البيانات إلى JSON
-
-        // البحث في العمود الأول (الاسم) والعودة بالقيمة المقابلة من العمود الثاني
-        let found = false;
-        for (let row of data) {
-            if (row[0] && row[0].toString().toLowerCase() === searchQuery.toLowerCase()) {
-                res.json({ result: row[1] }); // إذا تم العثور على البيانات
-                found = true;
-                break;
-            }
-        }
-
-        if (!found) {
-            res.json({ error: 'لم يتم العثور على البيانات' }); // إذا لم يتم العثور على الاسم
-        }
-
-    } catch (error) {
-        console.error('Error processing the file:', error);
-        res.status(500).json({ error: 'حدث خطأ أثناء البحث' }); // إظهار الخطأ إذا حدث
-    }
+app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
 });
