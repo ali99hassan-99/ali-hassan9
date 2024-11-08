@@ -1,7 +1,7 @@
 // Function to fetch data from the local JSON file and search for a match
 function searchFunction() {
-    const searchTerm = document.getElementById("search").value.trim();
-    const resultElement = document.getElementById("search-result");
+    const searchTerm = document.getElementById("search").value.trim();  // الحصول على النص من حقل البحث
+    const resultElement = document.getElementById("search-result");  // العنصر الذي سيعرض النتيجة
 
     // إذا كان حقل البحث فارغًا
     if (searchTerm === "") {
@@ -10,7 +10,7 @@ function searchFunction() {
     }
 
     // جلب البيانات من الملف data.json
-    fetch('data.json')  // تأكد أن مسار data.json صحيح
+    fetch('data.json')  // تأكد أن مسار data.json صحيح (مسار الملف في نفس المجلد)
         .then(response => {
             if (!response.ok) {
                 throw new Error('فشل في تحميل البيانات');
@@ -18,8 +18,8 @@ function searchFunction() {
             return response.json(); // تحليل البيانات بتنسيق JSON
         })
         .then(data => {
-            // البحث عن المطابقة
-            const match = data.find(entry => entry.name === searchTerm);
+            // البحث عن المطابقة في البيانات
+            const match = data.find(entry => entry.name.trim() === searchTerm); // التأكد من تطابق الاسم تمامًا
 
             if (match) {
                 // إذا تم العثور على المطابقة
