@@ -1,32 +1,37 @@
 // Function to fetch data from the local JSON file and search for a match
 function searchFunction() {
-    // Get the input value (the name to search)
     const searchTerm = document.getElementById("search").value.trim();
     const resultElement = document.getElementById("search-result");
 
+    // إذا كان حقل البحث فارغًا
     if (searchTerm === "") {
         resultElement.textContent = "الرجاء إدخال اسم للبحث";
         return;
     }
 
-    // Fetch the data from data.json (located in the root folder)
-    fetch('data.json')
-        .then(response => response.json()) // Parse the JSON response
+    // جلب البيانات من الملف data.json
+    fetch('data.json')  // تأكد أن مسار data.json صحيح
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('فشل في تحميل البيانات');
+            }
+            return response.json(); // تحليل البيانات بتنسيق JSON
+        })
         .then(data => {
-            // Try to find a matching name in the JSON data
+            // البحث عن المطابقة
             const match = data.find(entry => entry.name === searchTerm);
 
             if (match) {
-                // Display the result if a match is found
+                // إذا تم العثور على المطابقة
                 resultElement.textContent = `تم العثور على المقابلة: ${match.meeting}`;
             } else {
-                // Show a message if no match is found
+                // إذا لم يتم العثور على مطابقة
                 resultElement.textContent = "لم يتم العثور على البيانات.";
             }
         })
         .catch(error => {
-            // Handle any errors that may occur during the fetch operation
+            // التعامل مع الأخطاء مثل مشاكل الاتصال أو الأخطاء في التحليل
             resultElement.textContent = "حدث خطأ أثناء البحث.";
-            console.error(error); // Log the error for debugging
+            console.error(error); // تسجيل الخطأ في وحدة التحكم
         });
 }
