@@ -1,32 +1,24 @@
-// دالة البحث التي يتم استدعاؤها عند الضغط على زر البحث
 function searchFunction() {
-    var searchValue = document.getElementById("search").value;
-    var resultElement = document.getElementById("search-result");
+    const searchQuery = document.getElementById('search').value.trim(); // الحصول على النص المدخل من المستخدم
+    const resultElement = document.getElementById('search-result'); // العنصر لعرض النتيجة
 
-    // التأكد من إدخال قيمة في خانة البحث
-    if (!searchValue) {
-        resultElement.innerHTML = "يرجى إدخال اسم للبحث.";
+    if (!searchQuery) {
+        resultElement.textContent = 'يرجى إدخال اسم للبحث';
         return;
     }
 
-    // ارسال طلب للبحث في ملف الاكسل (تأكد من إعداد السيرفر بشكل صحيح)
-    fetch('/search', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name: searchValue }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.found) {
-            resultElement.innerHTML = `تم العثور على البيانات: ${data.name} - ${data.details}`;
-        } else {
-            resultElement.innerHTML = "لم يتم العثور على البيانات.";
-        }
-    })
-    .catch(error => {
-        console.error("حدث خطأ أثناء البحث:", error);
-        resultElement.innerHTML = "حدث خطأ أثناء البحث.";
-    });
+    // إرسال طلب GET إلى السيرفر للبحث
+    fetch(`/search?name=${encodeURIComponent(searchQuery)}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.result) {
+                resultElement.textContent = `النتيجة: ${data.result}`; // عرض النتيجة إذا تم العثور عليها
+            } else {
+                resultElement.textContent = data.error || 'حدث خطأ أثناء البحث'; // عرض الخطأ إذا لم يتم العثور على البيانات
+            }
+        })
+        .catch(error => {
+            resultElement.textContent = 'حدث خطأ أثناء البحث';
+            console.error('Error:', error); // عرض الخطأ في الكونسول للمساعدة في التصحيح
+        });
 }
