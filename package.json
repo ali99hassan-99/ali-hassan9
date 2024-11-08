@@ -1,0 +1,15 @@
+{
+  "name": "بوت-العقود",
+  "version": "1.0.0",
+  "description": "مشروع للبحث في ملفات Excel",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "xlsx": "^0.17.0"
+  },
+  "author": "اسمك",
+  "license": "ISC"
+}
