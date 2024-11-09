@@ -8,7 +8,8 @@
   },
   "dependencies": {
     "express": "^4.17.1",
-    "xlsx": "^0.17.0"
+    "xlsx": "^0.17.0",
+    "axios": "^1.6.0"  // تم إضافة مكتبة axios هنا
   },
   "author": "اسمك",
   "license": "ISC"
