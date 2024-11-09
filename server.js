@@ -8,10 +8,13 @@ const port = 3000;
 // إعداد التطبيق ليتمكن من التعامل مع بيانات JSON
 app.use(express.json());
 
+// إعداد مجلد "public" ليتمكن المستخدمون من الوصول إليه عبر الإنترنت
+app.use(express.static(path.join(__dirname, 'public')));
+
 // دالة لقراءة ملف Excel والبحث فيه
 function searchExcel(name) {
-    // تحديد مسار ملف Excel الذي يحتوي على البيانات
-    const filePath = path.join(__dirname, 'ali.xlsx'); // تأكد من أن ملف Excel في نفس مجلد الأكواد
+    // تحديد مسار ملف Excel في مجلد "public"
+    const filePath = path.join(__dirname, 'public', 'ali.xlsx'); // تعديل المسار هنا
     const workbook = xlsx.readFile(filePath);  // قراءة الملف
     const sheetName = workbook.SheetNames[0]; // نفترض أن البيانات في أول ورقة
     const sheet = workbook.Sheets[sheetName];
