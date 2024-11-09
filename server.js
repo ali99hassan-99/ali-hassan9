@@ -1,65 +1,42 @@
-// استيراد المكتبات اللازمة
 const express = require('express');
-const xlsx = require('xlsx');
-const axios = require('axios');
 const path = require('path');
+const fs = require('fs');
+const XLSX = require('xlsx');
 const app = express();
 const port = 3000;
 
-// إعداد التطبيق ليتمكن من التعامل مع بيانات JSON
-app.use(express.json());
-
-// إعداد مجلد "public" ليتمكن المستخدمون من الوصول إليه عبر الإنترنت
+// تحديد مسار مجلد public
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json()); // لتفسير بيانات JSON المرسلة من العميل
 
-// دالة لتحميل ملف Excel من رابط GitHub وتحويله إلى JSON
-async function searchExcel(name) {
-    // رابط raw لملف Excel في GitHub
-    const fileUrl = 'https://raw.githubusercontent.com/ali99hassan-99/ali-hassan9/e57f958836184c49a08ef13885f5bf503d7be411/public/ali.xlsx';
+// تحميل ملف الاكسل
+const workbook = XLSX.readFile(path.join(__dirname, 'public', 'ali.xlsx'));
+const sheet = workbook.Sheets[workbook.SheetNames[0]];
 
-    try {
-        // تحميل الملف من GitHub
-        const response = await axios.get(fileUrl, { responseType: 'arraybuffer' });
+// نقطة النهاية للبحث
+app.post('/search', (req, res) => {
+    const { name } = req.body; // تغيير 'searchTerm' إلى 'name' ليتطابق مع الكود في الواجهة الأمامية
+    const searchResults = [];
 
-        // قراءة الملف باستخدام xlsx
-        const workbook = xlsx.read(response.data);
+    // استخراج بيانات من العمود A وB
+    for (let row = 1; row <= 1000; row++) { // افترض أن البيانات في 1000 صف
+        const nameCell = sheet[`A${row}`] ? sheet[`A${row}`].v : '';
+        const resultCell = sheet[`B${row}`] ? sheet[`B${row}`].v : '';
 
-        // نفترض أن البيانات في أول ورقة
-        const sheetName = workbook.SheetNames[0];
-        const sheet = workbook.Sheets[sheetName];
-
-        // تحويل البيانات في الورقة إلى JSON
-        const data = xlsx.utils.sheet_to_json(sheet);
-
-        // البحث عن الاسم في العمود A (الذي يحتوي على الأسماء)
-        const result = data.find(row => row['A'] === name); // تأكد من أن 'A' هو اسم العمود في ملف Excel
-
-        return result; // إرجاع النتيجة إذا تم العثور على الاسم
-    } catch (error) {
-        console.error("حدث خطأ أثناء تحميل أو معالجة الملف:", error);
-        return null;
-    }
-}
-
-// إنشاء API لبحث الاسم
-app.post('/search', async (req, res) => {
-    const { name } = req.body;
-
-    if (!name) {
-        return res.status(400).json({ found: false, message: 'يرجى إدخال اسم للبحث.' });
+        if (nameCell && nameCell.includes(name)) { // البحث باستخدام 'name'
+            searchResults.push(resultCell);
+        }
     }
 
-    const result = await searchExcel(name);
-
-    if (result) {
-        // إرجاع النتيجة مع الاسم والتفاصيل من العمود B
-        res.json({ found: true, name: result['A'], details: result['B'] }); // العمود A للاسم و B للتفاصيل
+    // إذا تم العثور على النتائج
+    if (searchResults.length > 0) {
+        res.json({ found: true, name: searchResults.join(', ') });
     } else {
-        res.json({ found: false, message: 'لم يتم العثور على البيانات.' });
+        res.json({ found: false });
     }
 });
 
-// بدء الخادم على المنفذ 3000
+// تشغيل الخادم
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
