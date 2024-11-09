@@ -18,6 +18,7 @@ const data = [
 app.post('/search', (req, res) => {
     const { name } = req.body; // الحصول على الاسم الذي يبحث عنه المستخدم
 
+    // التحقق من إدخال الاسم
     if (!name) {
         return res.status(400).json({ found: false, message: 'يرجى إدخال اسم للبحث.' });
     }
@@ -25,6 +26,7 @@ app.post('/search', (req, res) => {
     // البحث في البيانات
     const searchResults = data.filter(entry => entry.name.includes(name));
 
+    // إذا تم العثور على نتائج
     if (searchResults.length > 0) {
         const interviews = searchResults.map(entry => entry.interview).join(', ');
         res.json({ found: true, interviews });
