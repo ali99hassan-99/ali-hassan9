@@ -1,38 +1,34 @@
+// دالة البحث التي يتم استدعاؤها عند الضغط على زر البحث
 function searchFunction() {
-    const searchTerm = document.getElementById("search").value.trim();  // الحصول على النص من حقل البحث
-    const resultElement = document.getElementById("search-result");  // العنصر الذي سيعرض النتيجة
+    var searchValue = document.getElementById("search").value; // قيمة البحث من المدخل النصي
+    var resultElement = document.getElementById("search-result"); // العنصر لعرض النتيجة
 
-    // إذا كان حقل البحث فارغًا
-    if (searchTerm === "") {
-        resultElement.textContent = "الرجاء إدخال اسم للبحث";
+    // التأكد من إدخال قيمة في خانة البحث
+    if (!searchValue) {
+        resultElement.innerHTML = "يرجى إدخال اسم للبحث.";
         return;
     }
 
-    // جلب البيانات من ملف JSON
-    fetch('data.json')  // تأكد من مسار data.json صحيح (يجب أن يكون في نفس المجلد مع index.html)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('فشل في تحميل البيانات: ' + response.statusText);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('بيانات تم تحميلها بنجاح:', data);  // طباعة البيانات في وحدة التحكم
-
-            // البحث عن المطابقة في البيانات
-            const match = data.find(entry => entry.name.trim() === searchTerm);
-
-            if (match) {
-                // إذا تم العثور على المطابقة
-                resultElement.textContent = `تم العثور على المقابلة: ${match.meeting}`;
-            } else {
-                // إذا لم يتم العثور على مطابقة
-                resultElement.textContent = "لم يتم العثور على البيانات.";
-            }
-        })
-        .catch(error => {
-            // التعامل مع الأخطاء في وحدة التحكم
-            resultElement.textContent = "حدث خطأ أثناء البحث: " + error.message;  // رسالة تظهر للمستخدم مع تفاصيل الخطأ
-            console.error('حدث خطأ:', error);  // طباعة تفاصيل الخطأ في وحدة التحكم
-        });
+    // إرسال طلب للبحث في ملف Excel عبر الخادم
+    fetch('/search', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: searchValue }), // إرسال الاسم الذي سيتم البحث عنه
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.found) {
+            // إذا تم العثور على الاسم، عرض النتيجة
+            resultElement.innerHTML = `تم العثور على البيانات: ${data.name} - ${data.details}`;
+        } else {
+            // إذا لم يتم العثور على الاسم
+            resultElement.innerHTML = "لم يتم العثور على البيانات.";
+        }
+    })
+    .catch(error => {
+        console.error("حدث خطأ أثناء البحث:", error);
+        resultElement.innerHTML = "حدث خطأ أثناء البحث.";
+    });
 }
