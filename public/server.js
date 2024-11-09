@@ -1,50 +1,38 @@
-const express = require('express');
+const xlsx = require('xlsx');
 const fs = require('fs');
-const path = require('path');
-const app = express();
-const port = 3000;
+const path = './names.xlsx';
 
-// إعدادات middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public'))); // للملفات الثابتة
+app.post('/add-name', (req, res) => {
+    const { name } = req.body;
 
-// تحميل بيانات الأسماء من ملف JSON
-function loadData() {
-  const data = fs.readFileSync('names.json', 'utf8');
-  return JSON.parse(data);
-}
+    if (!name) {
+        return res.status(400).json({ message: "يرجى إدخال اسم." });
+    }
 
-// حفظ البيانات في ملف JSON
-function saveData(data) {
-  fs.writeFileSync('names.json', JSON.stringify(data, null, 2), 'utf8');
-}
+    // قراءة ملف Excel
+    let workbook;
+    if (fs.existsSync(path)) {
+        workbook = xlsx.readFile(path);
+    } else {
+        workbook = xlsx.utils.book_new();
+    }
 
-// نقطة لإحضار كل الأسماء
-app.get('/api/names', (req, res) => {
-  const data = loadData();
-  res.json(data);
-});
+    // استخراج أو إنشاء ورقة العمل
+    let sheet = workbook.Sheets['Names'];
+    if (!sheet) {
+        sheet = xlsx.utils.aoa_to_sheet([['Name']]);
+        xlsx.utils.book_append_sheet(workbook, sheet, 'Names');
+    }
 
-// نقطة لإضافة اسم جديد
-app.post('/api/names', (req, res) => {
-  const { name, interview } = req.body;
-  const data = loadData();
-  data.push({ name, interview });
-  saveData(data);
-  res.json({ success: true, message: 'تمت إضافة الاسم بنجاح' });
-});
+    // العثور على أول صف فارغ في الورقة
+    const rows = xlsx.utils.sheet_to_json(sheet, { header: 1 });
+    const newRow = rows.length + 1;
 
-// نقطة لحذف اسم
-app.delete('/api/names/:name', (req, res) => {
-  const nameToDelete = req.params.name;
-  let data = loadData();
-  data = data.filter(entry => entry.name !== nameToDelete);
-  saveData(data);
-  res.json({ success: true, message: 'تم حذف الاسم بنجاح' });
-});
+    // إضافة الاسم إلى الورقة
+    sheet[`A${newRow}`] = { v: name };
 
-// بدء الخادم
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+    // حفظ التغييرات في ملف Excel
+    xlsx.writeFile(workbook, path);
+
+    res.json({ message: "تم إضافة الاسم بنجاح." });
 });
