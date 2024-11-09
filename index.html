@@ -28,15 +28,27 @@
         <button onclick="searchFunction()">بحث</button>
         <p id="search-result"></p>
 
-        <!-- الأزرار المطلوبة -->
         <div class="buttons">
             <button onclick="window.location.href='https://t.me/ali2024hasbot'"> بوت البحث عن المقابلات</button>
             <button onclick="window.location.href='https://t.me/ali99113bot'"> إرسال الاسم للبحث اليدوي</button>
             <button onclick="window.location.href='https://spa.gov.iq/umbrella/search.aspx'">مضلتـــي</button>
         </div>
+
+        <!-- الزر الجديد لفتح النافذة المنبثقة -->
+        <button onclick="openAddNameModal()">إضافة اسم جديد</button>
     </section>
 
-    <!-- إضافة مسافة فارغة بين الأزرار والفوتر -->
+    <!-- النافذة المنبثقة لإضافة اسم جديد -->
+    <div id="addNameModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAddNameModal()">&times;</span>
+            <h3>إضافة اسم جديد</h3>
+            <input type="text" id="newName" placeholder="أدخل الاسم" />
+            <input type="text" id="newInterview" placeholder="أدخل المقابلة" />
+            <button onclick="addName()">إضافة</button>
+        </div>
+    </div>
+
     <div class="footer-space"></div>
 
     <footer>
