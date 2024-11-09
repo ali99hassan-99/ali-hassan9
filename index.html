@@ -76,7 +76,7 @@
             // البحث في البيانات
             const found = sheetData.find(row => row[0] && row[0].includes(searchTerm));
             if (found) {
-                result.innerText = `/: ${found[0]}, المقابلة: ${found[1]}`;
+                result.innerText = `مقابلتك: ${found[0]}, المقابلة: ${found[1]}`;
             } else {
                 result.innerText = 'لم يتم العثور على البيانات.';
             }
