@@ -1,3 +1,4 @@
+// استيراد مكتبة Express
 const express = require('express');
 const app = express();
 const port = 3000;
@@ -28,7 +29,7 @@ app.post('/search', (req, res) => {
 
     // إذا تم العثور على نتائج
     if (searchResults.length > 0) {
-        const interviews = searchResults.map(entry => entry.interview).join(', ');
+        const interviews = searchResults.map(entry => entry.interview);
         res.json({ found: true, interviews });
     } else {
         res.status(404).json({ found: false, message: 'لم يتم العثور على البيانات.' });
