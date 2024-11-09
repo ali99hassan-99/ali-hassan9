@@ -1,77 +1,52 @@
-// تحميل ملف Excel والبحث فيه
-function searchFunction() {
-    const searchQuery = document.getElementById("search").value.trim();
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>علي حسن للبرمجيات</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+</head>
+<body>
+    <div class="news-ticker">
+        <p id="news-content"> عن أمير المؤمنين عليه السلام: "تنافسوا في المعروف لإخوانكم وكونوا من أهله، فإن للجنة باباً يقال له المعروف، لا يدخله إلا من اصطنع المعروف في الحياة الدنيا. فإن العبد ليمشي في حاجة أخيه المؤمن فيوكّل اللَّه به ملكين، واحداً عن يمينه وآخر عن شماله، يستغفران له ربّه ويدعوان بقضاء حاجته.. اسألكم الدعاء لي ولوالدي"</p>
+    </div>
 
-    if (!searchQuery) {
-        alert("يرجى إدخال اسم للبحث");
-        return;
-    }
+    <header>
+        <h1>علي حسن للبرمجيات</h1>
+    </header>
 
-    // قراءة ملف Excel
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = '.xlsx, .xls';
-    
-    fileInput.onchange = function(event) {
-        const file = event.target.files[0];
-        const reader = new FileReader();
+    <section class="profile">
+        <img src="a1.jpg" alt="صورتك" class="profile-img">
+        <h2>مرحبًا بك في مدونتي علي حسن للبرمجيات</h2>
+        <p>نحن نقدم حلولاً برمجية مبتكرة تساعد في تطوير أعمالك وتقنياتك. تابعنا للحصول على أحدث الأخبار والتحديثات.</p>
+    </section>
 
-        reader.onload = function(e) {
-            const data = new Uint8Array(e.target.result);
-            const workbook = XLSX.read(data, { type: 'array' });
+    <section class="search-bar">
+        <p>للبحث عن مقابلتك ، اكتب اسمك الرباعي واضغط "بحث"</p>
+        <input type="text" id="search" placeholder="ابحث هنا..." />
+        <button onclick="searchFunction()">بحث</button>
+        <p id="search-result"></p>
 
-            // اختر الورقة الأولى
-            const sheet = workbook.Sheets[workbook.SheetNames[0]];
-            const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+        <div class="buttons">
+            <button onclick="window.location.href='https://t.me/ali2024hasbot'"> بوت البحث عن المقابلات</button>
+            <button onclick="window.location.href='https://t.me/ali99113bot'"> إرسال الاسم للبحث اليدوي</button>
+            <button onclick="window.location.href='https://spa.gov.iq/umbrella/search.aspx'">مضلتـــي</button>
+        </div>
+    </section>
 
-            let result = '';
-            let found = false;
+    <div class="footer-space"></div>
 
-            // البحث في العمود الأول (الأسماء)
-            rows.forEach(row => {
-                if (row[0] && row[0].includes(searchQuery)) {
-                    result = row[1] ? row[1] : 'لا توجد مقابلة مسجلة';
-                    found = true;
-                }
-            });
+    <footer>
+        <p>يمنكم التواصل معي على:</p>
+        <ul>
+            <li><a href="https://www.facebook.com/profile.php?id=100079286824119&mibextid=ZbWKwL" class="facebook"><i class="fab fa-facebook-f"></i> فيسبوك</a></li>
+            <li><a href="https://t.me/a9_9h9" class="telegram"><i class="fab fa-telegram-plane"></i> تليجرام</a></li>
+            <li><a href="https://wa.me/9647822621995" class="whatsapp"><i class="fab fa-whatsapp"></i> واتساب</a></li>
+        </ul>
+        <p>جميع الحقوق محفوظة للمطور علي حسن</p>
+    </footer>
 
-            // عرض النتيجة
-            if (found) {
-                document.getElementById("search-result").innerText = `المقابلة: ${result}`;
-            } else {
-                document.getElementById("search-result").innerText = 'الاسم غير موجود في الملف';
-            }
-        };
-
-        reader.readAsArrayBuffer(file);
-    };
-
-    fileInput.click();
-}
-
-// إضافة اسم جديد إلى البيانات (يمكن تعديل هذا حسب الحاجة لتخزين البيانات)
-function addName() {
-    const newName = document.getElementById("newName").value.trim();
-    const newInterview = document.getElementById("newInterview").value.trim();
-
-    if (!newName || !newInterview) {
-        alert("يرجى ملء جميع الحقول");
-        return;
-    }
-
-    // هنا يمكن إضافة البيانات إلى ملف Excel أو قاعدة بيانات حسب الحاجة
-    console.log(`تم إضافة: ${newName} - ${newInterview}`);
-
-    // غلق النافذة المنبثقة
-    closeAddNameModal();
-}
-
-// فتح النافذة المنبثقة لإضافة اسم جديد
-function openAddNameModal() {
-    document.getElementById("addNameModal").style.display = "block";
-}
-
-// غلق النافذة المنبثقة
-function closeAddNameModal() {
-    document.getElementById("addNameModal").style.display = "none";
-}
+    <script src="script.js"></script>
+</body>
+</html>
