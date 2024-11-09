@@ -6,10 +6,11 @@
     <title>علي حسن للبرمجيات</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script> <!-- مكتبة xlsx -->
 </head>
 <body>
     <div class="news-ticker">
-        <p id="news-content"> عن أمير المؤمنين عليه السلام: "تنافسوا في المعروف لإخوانكم وكونوا من أهله، فإن للجنة باباً يقال له المعروف، لا يدخله إلا من اصطنع المعروف في الحياة الدنيا. فإن العبد ليمشي في حاجة أخيه المؤمن فيوكّل اللَّه به ملكين، واحداً عن يمينه وآخر عن شماله، يستغفران له ربّه ويدعوان بقضاء حاجته.. اسألكم الدعاء لي ولوالدي"</p>
+        <p id="news-content"> عن أمير المؤمنين عليه السلام: "تنافسوا في المعروف لإخوانكم وكونوا من أهله..."</p>
     </div>
 
     <header>
@@ -27,27 +28,7 @@
         <input type="text" id="search" placeholder="ابحث هنا..." />
         <button onclick="searchFunction()">بحث</button>
         <p id="search-result"></p>
-
-        <div class="buttons">
-            <button onclick="window.location.href='https://t.me/ali2024hasbot'"> بوت البحث عن المقابلات</button>
-            <button onclick="window.location.href='https://t.me/ali99113bot'"> إرسال الاسم للبحث اليدوي</button>
-            <button onclick="window.location.href='https://spa.gov.iq/umbrella/search.aspx'">مضلتـــي</button>
-        </div>
-
-        <!-- الزر الجديد لفتح النافذة المنبثقة -->
-        <button onclick="openAddNameModal()">إضافة اسم جديد</button>
     </section>
-
-    <!-- النافذة المنبثقة لإضافة اسم جديد -->
-    <div id="addNameModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeAddNameModal()">&times;</span>
-            <h3>إضافة اسم جديد</h3>
-            <input type="text" id="newName" placeholder="أدخل الاسم" />
-            <input type="text" id="newInterview" placeholder="أدخل المقابلة" />
-            <button onclick="addName()">إضافة</button>
-        </div>
-    </div>
 
     <div class="footer-space"></div>
 
@@ -61,6 +42,45 @@
         <p>جميع الحقوق محفوظة للمطور علي حسن</p>
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        let sheetData = [];
+
+        // تحميل ملف Excel من الرابط
+        function loadExcelFile(url) {
+            fetch(url)
+                .then(response => response.arrayBuffer())
+                .then(data => {
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                    sheetData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+                    console.log('Data loaded:', sheetData);
+                })
+                .catch(error => console.error('Error loading the file:', error));
+        }
+
+        // تحميل الملف عند تحميل الصفحة
+        window.onload = function() {
+            const url = 'https://download1528.mediafire.com/lp9ymyucy18gUU7aTShcxMpQJ99ZfYq2jZRfGBhtuCHlCcPwOipkwVeH081qoC8ZEXPTwpCiLaO-qsBrjDGYzWJaQzYNSJWJm3yGMYUvGv1ImWT0-f4xYdtFtJTzcKGd7Z7oqaxY8q2ROqB7zOp2tK7a7h4gFZ-JVl-xePvp0Vku-hg/z2zsptahv0xtibh/Names.xlsx';
+            loadExcelFile(url);
+        };
+
+        // دالة البحث
+        function searchFunction() {
+            const searchTerm = document.getElementById('search').value.trim();
+            const result = document.getElementById('search-result');
+            if (!searchTerm) {
+                result.innerText = 'يرجى إدخال اسم للبحث.';
+                return;
+            }
+
+            // البحث في البيانات
+            const found = sheetData.find(row => row[0] && row[0].includes(searchTerm));
+            if (found) {
+                result.innerText = `الاسم: ${found[0]}, المقابلة: ${found[1]}`;
+            } else {
+                result.innerText = 'لم يتم العثور على البيانات.';
+            }
+        }
+    </script>
 </body>
 </html>
