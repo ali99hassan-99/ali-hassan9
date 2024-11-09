@@ -9,13 +9,13 @@ function searchFunction() {
         return;
     }
 
-    // ارسال طلب للبحث في ملف الاكسل (تأكد من إعداد السيرفر بشكل صحيح)
+    // ارسال طلب للبحث في ملف البيانات (data.json)
     fetch('/search', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name: searchValue }), // تأكد من استخدام 'name' بدلاً من 'searchTerm'
+        body: JSON.stringify({ name: searchValue }), // إرسال البيانات باستخدام 'name'
     })
     .then(response => response.json())
     .then(data => {
