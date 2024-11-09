@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>إدارة الأسماء</title>
+  <style>
+    body { font-family: Arial, sans-serif; direction: rtl; }
+    input, button { padding: 8px; margin: 5px; font-size: 16px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    table, th, td { border: 1px solid black; padding: 10px; }
+  </style>
+</head>
+<body>
+  <h1>لوحة إدارة الأسماء</h1>
+
+  <h3>إضافة اسم جديد</h3>
+  <input type="text" id="name" placeholder="الاسم">
+  <input type="text" id="interview" placeholder="المقابلة">
+  <button onclick="addName()">إضافة</button>
+
+  <h3>قائمة الأسماء</h3>
+  <table id="namesTable">
+    <thead>
+      <tr>
+        <th>الاسم</th>
+        <th>المقابلة</th>
+        <th>إجراءات</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+
+  <script>
+    async function fetchNames() {
+      const response = await fetch('/api/names');
+      const data = await response.json();
+      const table = document.getElementById('namesTable').getElementsByTagName('tbody')[0];
+      table.innerHTML = '';
+      data.forEach(entry => {
+        const row = table.insertRow();
+        row.innerHTML = `
+          <td>${entry.name}</td>
+          <td>${entry.interview}</td>
+          <td><button onclick="deleteName('${entry.name}')">حذف</button></td>
+        `;
+      });
+    }
+
+    async function addName() {
+      const name = document.getElementById('name').value;
+      const interview = document.getElementById('interview').value;
+      await fetch('/api/names', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, interview })
+      });
+      document.getElementById('name').value = '';
+      document.getElementById('interview').value = '';
+      fetchNames();
+    }
+
+    async function deleteName(name) {
+      await fetch(`/api/names/${name}`, { method: 'DELETE' });
+      fetchNames();
+    }
+
+    fetchNames();
+  </script>
+</body>
+</html>
