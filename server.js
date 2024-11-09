@@ -29,15 +29,15 @@ app.post('/search', (req, res) => {
     // البحث عن الأسماء في البيانات
     data.forEach(entry => {
         if (entry.name.includes(name)) {
-            searchResults.push(entry.details); // إضافة التفاصيل إذا تم العثور على الاسم
+            searchResults.push(entry.interview); // إضافة المقابلة إذا تم العثور على الاسم
         }
     });
 
     // إذا تم العثور على النتائج
     if (searchResults.length > 0) {
-        res.json({ found: true, name: searchResults.join(', ') });
+        res.json({ found: true, interviews: searchResults.join(', ') });
     } else {
-        res.json({ found: false });
+        res.json({ found: false, message: 'لم يتم العثور على البيانات.' });
     }
 });
 
