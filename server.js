@@ -1,42 +1,77 @@
-// استيراد مكتبة Express
-const express = require('express');
-const app = express();
-const port = 3000;
+// تحميل ملف Excel والبحث فيه
+function searchFunction() {
+    const searchQuery = document.getElementById("search").value.trim();
 
-// إعداد التطبيق ليتمكن من التعامل مع بيانات JSON
-app.use(express.json());
-
-// البيانات الثابتة داخل الكود
-const data = [
-    { "name": "أحمد علي", "interview": "المقابلة 1" },
-    { "name": "محمد سعيد", "interview": "المقابلة 2" },
-    { "name": "فلاح", "interview": "المقابلة 3" },
-    { "name": "علي حسن", "interview": "المقابلة 3" },
-    { "name": "سارة خالد", "interview": "المقابلة 3" }
-];
-
-// نقطة النهاية للبحث
-app.post('/search', (req, res) => {
-    const { name } = req.body; // الحصول على الاسم الذي يبحث عنه المستخدم
-
-    // التحقق من إدخال الاسم
-    if (!name) {
-        return res.status(400).json({ found: false, message: 'يرجى إدخال اسم للبحث.' });
+    if (!searchQuery) {
+        alert("يرجى إدخال اسم للبحث");
+        return;
     }
 
-    // البحث في البيانات
-    const searchResults = data.filter(entry => entry.name.includes(name));
+    // قراءة ملف Excel
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.xlsx, .xls';
+    
+    fileInput.onchange = function(event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
 
-    // إذا تم العثور على نتائج
-    if (searchResults.length > 0) {
-        const interviews = searchResults.map(entry => entry.interview);
-        res.json({ found: true, interviews });
-    } else {
-        res.status(404).json({ found: false, message: 'لم يتم العثور على البيانات.' });
+        reader.onload = function(e) {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+
+            // اختر الورقة الأولى
+            const sheet = workbook.Sheets[workbook.SheetNames[0]];
+            const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+            let result = '';
+            let found = false;
+
+            // البحث في العمود الأول (الأسماء)
+            rows.forEach(row => {
+                if (row[0] && row[0].includes(searchQuery)) {
+                    result = row[1] ? row[1] : 'لا توجد مقابلة مسجلة';
+                    found = true;
+                }
+            });
+
+            // عرض النتيجة
+            if (found) {
+                document.getElementById("search-result").innerText = `المقابلة: ${result}`;
+            } else {
+                document.getElementById("search-result").innerText = 'الاسم غير موجود في الملف';
+            }
+        };
+
+        reader.readAsArrayBuffer(file);
+    };
+
+    fileInput.click();
+}
+
+// إضافة اسم جديد إلى البيانات (يمكن تعديل هذا حسب الحاجة لتخزين البيانات)
+function addName() {
+    const newName = document.getElementById("newName").value.trim();
+    const newInterview = document.getElementById("newInterview").value.trim();
+
+    if (!newName || !newInterview) {
+        alert("يرجى ملء جميع الحقول");
+        return;
     }
-});
 
-// بدء الخادم
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-});
+    // هنا يمكن إضافة البيانات إلى ملف Excel أو قاعدة بيانات حسب الحاجة
+    console.log(`تم إضافة: ${newName} - ${newInterview}`);
+
+    // غلق النافذة المنبثقة
+    closeAddNameModal();
+}
+
+// فتح النافذة المنبثقة لإضافة اسم جديد
+function openAddNameModal() {
+    document.getElementById("addNameModal").style.display = "block";
+}
+
+// غلق النافذة المنبثقة
+function closeAddNameModal() {
+    document.getElementById("addNameModal").style.display = "none";
+}
