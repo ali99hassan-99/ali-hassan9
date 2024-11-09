@@ -1,16 +1,16 @@
-/* إضافة الخط */
+/* إضافة الخط من المجلد public */
 @font-face {
     font-family: 'fnaltasmeem';
-    src: url('fnaltasmeem A.H..H (101).ttf') format('truetype');
+    src: url('/fnaltasmeem_A.H..H_101.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 
 /* تنسيق عام */
 body {
-    font-family: 'fnaltasmeem', sans-serif;
+    font-family: 'fnaltasmeem', sans-serif; /* استخدام الخط الجديد */
     direction: rtl;
-    background-color: #87CEEB; /* اللون السماوي */
+    background-color: #87CEEB; /* اللون السمائي */
     margin: 0;
     padding: 0;
 }
@@ -25,27 +25,27 @@ body {
     position: relative;
     height: 40px;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: center; /* توسيط المحتوى أفقيًا */
+    align-items: center; /* توسيط المحتوى عموديًا */
 }
 
 /* نص الشريط المتحرك */
 .news-ticker p {
     position: absolute;
     white-space: nowrap;
-    animation: scroll 30s linear infinite;
+    animation: scroll 30s linear infinite; /* زيادة الزمن لجعل الحركة بطيئة */
     margin: 0;
-    font-size: 18px;
-    font-weight: bold;
+    font-size: 18px; /* حجم النص */
+    font-weight: bold; /* جعل النص عريضًا */
 }
 
 /* تأثير التحرك */
 @keyframes scroll {
     0% {
-        left: -100%;
+        left: -100%; /* بداية من أقصى اليمين */
     }
     100% {
-        left: 100%;
+        left: 100%; /* النهاية عند أقصى اليسار */
     }
 }
 
@@ -64,11 +64,11 @@ header {
 }
 
 .profile-img {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    border: 5px solid #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 150px; /* عرض الصورة */
+    height: 150px; /* ارتفاع الصورة */
+    border-radius: 50%; /* شكل دائري */
+    border: 5px solid #fff; /* إطار أبيض حول الصورة */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* تأثير الظل */
 }
 
 /* تنسيق شريط البحث */
@@ -78,8 +78,8 @@ header {
 }
 
 .search-bar p {
-    font-size: 18px;
-    font-weight: bold;
+    font-size: 18px; /* حجم الخط */
+    font-weight: bold; /* جعل النص عريضًا */
 }
 
 .search-bar input {
@@ -104,35 +104,17 @@ header {
     background-color: #1E90FF;
 }
 
-/* أزرار بوت تليجرام */
-.telegram-bot {
-    text-align: center;
-    margin: 30px 0;
-}
-
-.telegram-bot button {
-    background-color: #0088cc;
-    padding: 15px 30px;
-    font-size: 18px;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin: 10px 0; /* المسافة بين الأزرار نفسها */
-    width: 250px;
-}
-
-.telegram-bot button:hover {
-    background-color: #006fa6;
+/* إضافة المسافة بين الأزرار ونهاية الصفحة */
+.footer-space {
+    margin-bottom: 100px; /* زيادة المسافة بين الأزرار ونهاية الصفحة */
 }
 
 /* تنسيق الفوتر */
 footer {
-    background-color: #1E90FF;
+    background-color: #1E90FF; /* نفس لون شريط الأخبار */
     color: white;
     padding: 10px;
     text-align: center;
-    margin-top: 100px; /* المسافة بين الأزرار ونهاية الصفحة */
 }
 
 footer ul {
@@ -150,20 +132,21 @@ footer a {
     text-decoration: none;
 }
 
+/* ألوان مواقع التواصل الاجتماعي */
 footer a.facebook {
-    background-color: #3b5998;
+    background-color: #3b5998; /* فيسبوك */
     padding: 5px 10px;
     border-radius: 5px;
 }
 
 footer a.telegram {
-    background-color: #0088cc;
+    background-color: #0088cc; /* تليجرام */
     padding: 5px 10px;
     border-radius: 5px;
 }
 
 footer a.whatsapp {
-    background-color: #25d366;
+    background-color: #25d366; /* واتساب */
     padding: 5px 10px;
     border-radius: 5px;
 }
@@ -172,6 +155,36 @@ footer a i {
     margin-left: 5px;
 }
 
+/* تأثير عند التمرير على الروابط */
 footer a:hover {
     opacity: 0.8;
+}
+
+/* تنسيق المستطيل الطويل لبوت التلكرام */
+.telegram-bot {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.telegram-bot button {
+    background-color: #0088cc; /* لون تليجرام */
+    padding: 15px 30px;
+    font-size: 18px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 250px;
+}
+
+.telegram-bot button:hover {
+    background-color: #006fa6; /* لون أغمق عند التمرير */
+}
+
+/* تنسيق النص أسفل الصفحة */
+.footer-text {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    margin-top: 50px;
 }
