@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="news-ticker">
-        <p id="news-content"> عن أمير المؤمنين عليه السلام: "تنافسوا في المعروف لإخوانكم وكونوا من أهله..."</p>
+        <p id="news-content"> عن الإمام الصَّادق عليه السلام أنّه قال: "تنافسوا في المعروف لإخوانكم وكونوا من أهله, فإنّ للجنة باباً يقال له المعروف، لا يدخله إلّا من اصطنع المعروف في الحياة الدُّنيا, فإن العبد ليمشي في حاجة أخيه المؤمن فيوكّل الله به ملكين، واحداً عن يمينه وآخر عن شماله، يستغفران له ربّه ويدعوان بقضاء حاجته..اسألكم الدعاء لي ولوالدي..."</p>
     </div>
 
     <header>
@@ -29,6 +29,16 @@
         <p id="search-result"></p>
     </section>
 
+    <!-- قسم الخدمات الأخرى -->
+    <section class="additional-services">
+        <p>خدمات اخرى يمكنك الاستفادة منها</p>
+        <div class="buttons">
+            <a href="https://t.me/ali2024hasbot" class="service-button" target="_blank">بوت البحث عن مقابلتك</a>
+            <a href="https://t.me/ali99113bot" class="service-button" target="_blank">بوت ارسال اسم(بحث يدوي)</a>
+            <a href="https://spa.gov.iq/umbrella/search.aspx" class="service-button" target="_blank">موقع مضلتي</a>
+        </div>
+    </section>
+
     <div class="footer-space"></div>
 
     <footer>
@@ -44,7 +54,6 @@
     <script>
         let sheetData = [];
 
-        // تحميل ملف Excel من الرابط وتحويله إلى مصفوفة
         function loadExcelFile(url) {
             fetch(url)
                 .then(response => response.arrayBuffer())
@@ -52,18 +61,16 @@
                     const workbook = XLSX.read(data, { type: 'array' });
                     const sheet = workbook.Sheets[workbook.SheetNames[0]];
                     sheetData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-                    console.log('Data loaded:', sheetData); // تحقق من تحميل البيانات
+                    console.log('Data loaded:', sheetData);
                 })
                 .catch(error => console.error('Error loading the file:', error));
         }
 
-        // تحميل الملف عند تحميل الصفحة
         window.onload = function() {
             const url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRVV8V3W5SPPRd7c4X4hy9PSMhuxhRGBdi4eFGwua4xNQmCJatGEM2dsT_j-Mq6wA/pub?output=xlsx';
             loadExcelFile(url);
         };
 
-        // دالة البحث
         function searchFunction() {
             const searchTerm = document.getElementById('search').value.trim().toLowerCase();
             const result = document.getElementById('search-result');
@@ -72,14 +79,14 @@
                 return;
             }
 
-            // البحث في البيانات
             const found = sheetData.find(row => row[0] && row[0].toLowerCase().includes(searchTerm));
             if (found) {
-                result.innerText = `الأسم: ${found[0]}, قابلت في: ${found[1] || 'غير متوفرة'}`;
+                result.innerText = `الاسم: ${found[0]}, لقد قابلت في: ${found[1] || 'غير متوفرة'}`;
             } else {
                 result.innerText = 'لم يتم العثور على البيانات.';
             }
         }
     </script>
+
 </body>
 </html>
