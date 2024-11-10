@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>علي حسن للبرمجيات</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script> <!-- مكتبة xlsx -->
 </head>
 <body>
     <div class="news-ticker">
-        <p id="news-content"> عن أمير المؤمنين عليه السلام: "تنافسوا في المعروف لإخوانكم وكونوا من أهله، فإن للجنة باباً يقال له المعروف، لا يدخله إلا من اصطنع المعروف في الحياة الدنيا. فإن العبد ليمشي في حاجة أخيه المؤمن فيوكّل اللَّه به ملكين، واحداً عن يمينه وآخر عن شماله، يستغفران له ربّه ويدعوان بقضاء حاجته.. اسألكم الدعاء لي ولوالدي""</p>
+        <p id="news-content"> عن أمير المؤمنين عليه السلام: "تنافسوا في المعروف لإخوانكم وكونوا من أهله...</p>
     </div>
 
     <header>
@@ -20,11 +18,11 @@
     <section class="profile">
         <img src="a1.jpg" alt="صورتك" class="profile-img">
         <h2>مرحبًا بك في مدونتي علي حسن للبرمجيات</h2>
-        <p>نحن نقدم حلولاً برمجية مبتكرة تساعد في تطوير أعمالك وتقنياتك. تابعنا للحصول على أحدث الأخبار والتحديثات.</p>
+        <p>نحن نقدم حلولاً برمجية مبتكرة تساعد في تطوير أعمالك وتقنياتك.</p>
     </section>
 
     <section class="search-bar">
-        <p>للبحث عن مقابلتك ، اكتب ضيمك الرباعي واضغط "بحث"</p>
+        <p>للبحث عن مقابلتك ، اكتب اسمك الرباعي واضغط "بحث"</p>
         <input type="text" id="search" placeholder="ابحث هنا..." />
         <button onclick="searchFunction()">بحث</button>
         <p id="search-result"></p>
@@ -35,9 +33,9 @@
     <footer>
         <p>يمنكم التواصل معي على:</p>
         <ul>
-            <li><a href="https://www.facebook.com/profile.php?id=100079286824119&mibextid=ZbWKwL" class="facebook"><i class="fab fa-facebook-f"></i> فيسبوك</a></li>
-            <li><a href="https://t.me/a9_9h9" class="telegram"><i class="fab fa-telegram-plane"></i> تليجرام</a></li>
-            <li><a href="https://wa.me/9647822621995" class="whatsapp"><i class="fab fa-whatsapp"></i> واتساب</a></li>
+            <li><a href="https://www.facebook.com/profile.php?id=100079286824119&mibextid=ZbWKwL" class="facebook">فيسبوك</a></li>
+            <li><a href="https://t.me/a9_9h9" class="telegram">تليجرام</a></li>
+            <li><a href="https://wa.me/9647822621995" class="whatsapp">واتساب</a></li>
         </ul>
         <p>جميع الحقوق محفوظة للمطور علي حسن</p>
     </footer>
@@ -45,23 +43,36 @@
     <script>
         let sheetData = [];
 
-        // تحميل ملف Excel من الرابط
-        function loadExcelFile(url) {
+        // تحميل البيانات من Google Sheets بتنسيق JSON
+        function loadGoogleSheetData() {
+            const url = 'https://spreadsheets.google.com/feeds/cells/1GXVFSN0Vl4l54Or4Vr6tk_FrLmLh9JFP/1/public/full?alt=json';
             fetch(url)
-                .then(response => response.arrayBuffer())
+                .then(response => response.json())
                 .then(data => {
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const sheet = workbook.Sheets[workbook.SheetNames[0]];
-                    sheetData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+                    const entries = data.feed.entry;
+                    const rows = [];
+                    let row = [];
+                    let currentRowIndex = 1;
+
+                    entries.forEach(entry => {
+                        const cell = entry.gs$cell;
+                        if (cell.row > currentRowIndex) {
+                            rows.push(row);
+                            row = [];
+                            currentRowIndex = cell.row;
+                        }
+                        row.push(cell.$t);
+                    });
+                    rows.push(row);
+                    sheetData = rows;
                     console.log('Data loaded:', sheetData);
                 })
-                .catch(error => console.error('Error loading the file:', error));
+                .catch(error => console.error('Error loading the sheet:', error));
         }
 
-        // تحميل الملف عند تحميل الصفحة
+        // تحميل البيانات عند تحميل الصفحة
         window.onload = function() {
-            const url = 'https://www.mediafire.com/file/z2zsptahv0xtibh/Names.xlsx/file';
-            loadExcelFile(url);
+            loadGoogleSheetData();
         };
 
         // دالة البحث
@@ -78,7 +89,7 @@
             if (found) {
                 result.innerText = `مقابلتك: ${found[0]}, المقابلة: ${found[1]}`;
             } else {
-                result.innerText = 'لم يتم العثور على البيانات.';
+                result.innerText = 'لم يتم العثور على الظيم.';
             }
         }
     </script>
