@@ -75,7 +75,7 @@
             // البحث في البيانات
             const found = sheetData.find(row => row[0] && row[0].toLowerCase().includes(searchTerm));
             if (found) {
-                result.innerText = `مقابلتك: ${found[0]}, المقابلة: ${found[1] || 'غير متوفرة'}`;
+                result.innerText = `الأسم: ${found[0]}, قابلت في: ${found[1] || 'غير متوفرة'}`;
             } else {
                 result.innerText = 'لم يتم العثور على البيانات.';
             }
