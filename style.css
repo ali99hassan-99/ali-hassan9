@@ -1,16 +1,16 @@
-/* إضافة الخط من المجلد public */
+/* إضافة الخط */
 @font-face {
     font-family: 'fnaltasmeem';
-    src: url('https://raw.githubusercontent.com/ali99hassan-99/ali-hassan9/43109cc354ae192b8ed795234a246799eabe7965/public/fnaltasmeem%20A.H..H%20(101).ttf') format('truetype');
+    src: url('fnaltasmeem A.H..H (101).ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 
 /* تنسيق عام */
 body {
-    font-family: 'fnaltasmeem', sans-serif; /* استخدام الخط الجديد */
+    font-family: 'fnaltasmeem', sans-serif;
     direction: rtl;
-    background-color: #87CEEB; /* اللون السمائي */
+    background-color: #87CEEB; /* اللون السماوي */
     margin: 0;
     padding: 0;
 }
@@ -25,27 +25,27 @@ body {
     position: relative;
     height: 40px;
     display: flex;
-    justify-content: center; /* توسيط المحتوى أفقيًا */
-    align-items: center; /* توسيط المحتوى عموديًا */
+    justify-content: center;
+    align-items: center;
 }
 
 /* نص الشريط المتحرك */
 .news-ticker p {
     position: absolute;
     white-space: nowrap;
-    animation: scroll 30s linear infinite; /* زيادة الزمن لجعل الحركة بطيئة */
+    animation: scroll 30s linear infinite;
     margin: 0;
-    font-size: 18px; /* حجم النص */
-    font-weight: bold; /* جعل النص عريضًا */
+    font-size: 18px;
+    font-weight: bold;
 }
 
 /* تأثير التحرك */
 @keyframes scroll {
     0% {
-        left: -100%; /* بداية من أقصى اليمين */
+        left: -100%;
     }
     100% {
-        left: 100%; /* النهاية عند أقصى اليسار */
+        left: 100%;
     }
 }
 
@@ -64,11 +64,11 @@ header {
 }
 
 .profile-img {
-    width: 150px; /* عرض الصورة */
-    height: 150px; /* ارتفاع الصورة */
-    border-radius: 50%; /* شكل دائري */
-    border: 5px solid #fff; /* إطار أبيض حول الصورة */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* تأثير الظل */
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 5px solid #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 /* تنسيق شريط البحث */
@@ -78,8 +78,8 @@ header {
 }
 
 .search-bar p {
-    font-size: 18px; /* حجم الخط */
-    font-weight: bold; /* جعل النص عريضًا */
+    font-size: 18px;
+    font-weight: bold;
 }
 
 .search-bar input {
@@ -104,17 +104,70 @@ header {
     background-color: #1E90FF;
 }
 
-/* إضافة المسافة بين الأزرار ونهاية الصفحة */
-.footer-space {
-    margin-bottom: 100px; /* زيادة المسافة بين الأزرار ونهاية الصفحة */
+/* قسم الخدمات الأخرى */
+.additional-services {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.additional-services p {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.service-button {
+    padding: 10px 15px;
+    background-color: #0088cc; /* لون تيليجرام */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1em;
+    border: 2px solid #0088cc; /* إضافة حد باللون نفسه */
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.service-button:hover {
+    background-color: #007bb5; /* اللون عند المرور فوق الزر */
+    border-color: #007bb5; /* تغيير لون الحد عند المرور */
+}
+
+/* أزرار بوت تليجرام */
+.telegram-bot {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.telegram-bot button {
+    background-color: #0088cc;
+    padding: 15px 30px;
+    font-size: 18px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px 0; /* المسافة بين الأزرار نفسها */
+    width: 250px;
+}
+
+.telegram-bot button:hover {
+    background-color: #006fa6;
 }
 
 /* تنسيق الفوتر */
 footer {
-    background-color: #1E90FF; /* نفس لون شريط الأخبار */
+    background-color: #1E90FF;
     color: white;
     padding: 10px;
     text-align: center;
+    margin-top: 100px; /* المسافة بين الأزرار ونهاية الصفحة */
 }
 
 footer ul {
@@ -132,21 +185,20 @@ footer a {
     text-decoration: none;
 }
 
-/* ألوان مواقع التواصل الاجتماعي */
 footer a.facebook {
-    background-color: #3b5998; /* فيسبوك */
+    background-color: #3b5998;
     padding: 5px 10px;
     border-radius: 5px;
 }
 
 footer a.telegram {
-    background-color: #0088cc; /* تليجرام */
+    background-color: #0088cc;
     padding: 5px 10px;
     border-radius: 5px;
 }
 
 footer a.whatsapp {
-    background-color: #25d366; /* واتساب */
+    background-color: #25d366;
     padding: 5px 10px;
     border-radius: 5px;
 }
@@ -155,36 +207,6 @@ footer a i {
     margin-left: 5px;
 }
 
-/* تأثير عند التمرير على الروابط */
 footer a:hover {
     opacity: 0.8;
-}
-
-/* تنسيق المستطيل الطويل لبوت التلكرام */
-.telegram-bot {
-    text-align: center;
-    margin: 30px 0;
-}
-
-.telegram-bot button {
-    background-color: #0088cc; /* لون تليجرام */
-    padding: 15px 30px;
-    font-size: 18px;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 250px;
-}
-
-.telegram-bot button:hover {
-    background-color: #006fa6; /* لون أغمق عند التمرير */
-}
-
-/* تنسيق النص أسفل الصفحة */
-.footer-text {
-    text-align: center;
-    font-size: 14px;
-    color: #666;
-    margin-top: 50px;
 }
