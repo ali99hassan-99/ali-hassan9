@@ -66,7 +66,7 @@
 
         // دالة البحث
         function searchFunction() {
-            const searchTerm = document.getElementById('search').value.trim();
+            const searchTerm = document.getElementById('search').value.trim().toLowerCase();
             const result = document.getElementById('search-result');
             if (!searchTerm) {
                 result.innerText = 'يرجى إدخال اسم للبحث.';
@@ -74,7 +74,7 @@
             }
 
             // البحث في البيانات
-            const found = sheetData.find(row => row[0] && row[0].includes(searchTerm));
+            const found = sheetData.find(row => row[0] && row[0].toLowerCase().includes(searchTerm));
             if (found) {
                 result.innerText = `مقابلتك: ${found[0]}, المقابلة: ${found[1]}`;
             } else {
