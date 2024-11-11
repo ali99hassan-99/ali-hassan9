@@ -121,8 +121,27 @@ header {
     display: flex;
     justify-content: center;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
+/* زر اسماء الوجبة الأولى مميز */
+.special-button {
+    background-color: #FFD700; /* لون ذهبي */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1em;
+    border: 2px solid #FFD700;
+    padding: 10px 15px;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.special-button:hover {
+    background-color: #FFCC00; /* لون ذهبي فاتح عند التمرير */
+    border-color: #FFCC00;
+}
+
+/* تلوين الأزرار الأخرى */
 .service-button {
     padding: 10px 15px;
     background-color: #0088cc; /* لون تيليجرام */
@@ -153,7 +172,7 @@ header {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin: 10px 0; /* المسافة بين الأزرار نفسها */
+    margin: 10px 0;
     width: 250px;
 }
 
@@ -167,7 +186,7 @@ footer {
     color: white;
     padding: 10px;
     text-align: center;
-    margin-top: 100px; /* المسافة بين الأزرار ونهاية الصفحة */
+    margin-top: 100px;
 }
 
 footer ul {
